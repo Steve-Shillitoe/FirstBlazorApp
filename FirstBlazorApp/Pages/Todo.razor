@@ -1,0 +1,51 @@
+﻿@page "/todo"
+@using Microsoft.VisualBasic;
+
+<PageTitle>Todo</PageTitle>
+
+<h3>Todo</h3>
+
+<ul>
+    @foreach (var todo in todos)
+    {
+        <li>@todo.Title</li>
+    }
+</ul>
+
+<input placeholder="What do you need to do?" @bind="NewTodo" @bind:event="oninput" />
+<input placeholder="Due Date?" @bind="DueDate" />
+
+<button @onclick="AddTodo">Add todo</button>
+
+@if (!string.IsNullOrEmpty(NewTodo))
+{
+    <p>@NewTodo Due: DueDate?.ToShortDateString()</p>
+}
+
+@code {
+    private List<TodoItem> todos = new();
+    private string? NewTodo = string.Empty;
+    private DateTime? DueDate = null;
+
+    private void Save()
+    {
+        if (string.IsNullOrEmpty(NewTodo)) return;
+
+        todos.Add(new TodoItem
+            {
+                Title = NewTodo
+            });
+            NewTodo = string.Empty;
+
+
+    }
+
+    private void AddTodo()
+    {
+        if (!string.IsNullOrWhiteSpace(NewTodo))
+        {
+            todos.Add(new TodoItem { Title = NewTodo });
+            NewTodo = string.Empty;
+        }
+    }
+}
